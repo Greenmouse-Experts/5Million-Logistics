@@ -47,7 +47,7 @@ class AuthController extends Controller
                 'referral_code' => $this->referrer_id_generate(7),
                 'name' => ucfirst($request->name),
                 'email' => $request->email,
-                'sex' => $request->sex,
+                'sex' => ucfirst($request->sex),
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
                 'password' => Hash::make($request->password)
@@ -72,7 +72,7 @@ class AuthController extends Controller
                 'referral_code' => $this->referrer_id_generate(7),
                 'name' => ucfirst($request->name),
                 'email' => $request->email,
-                'sex' => $request->sex,
+                'sex' => ucfirst($request->sex),
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
                 'password' => Hash::make($request->password),

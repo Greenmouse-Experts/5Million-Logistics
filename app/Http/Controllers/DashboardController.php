@@ -52,6 +52,9 @@ class DashboardController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'sex' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
+            'city' => ['required', 'string', 'max:255'],
+            'state' => ['required', 'string', 'max:255'],
+            'country' => ['required', 'string', 'max:255'],
         ];
 
         $validator = Validator::make($input, $validate_data);
@@ -71,7 +74,10 @@ class DashboardController extends Controller
             $user->update([
                 'name' => $request->name,
                 'sex' => $request->sex,
-                'phone_number' => $request->phone_number
+                'phone_number' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country
             ]); 
         } else {
             //Validate Request
@@ -91,7 +97,10 @@ class DashboardController extends Controller
                 'email' => $request->email,
                 'name' => $request->name,
                 'sex' => $request->sex,
-                'phone_number' => $request->phone_number
+                'phone_number' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country
             ]); 
         }
 
@@ -158,7 +167,7 @@ class DashboardController extends Controller
             Storage::delete(str_replace("storage", "public", $user->avatar));
         }
         request()->avatar->storeAs('users_avatar', $filename, 'public');
-        $user->avatar = '/storage/users_avatar/'.$filename;
+        $user->photo = '/storage/users_avatar/'.$filename;
         $user->save();
 
         return response()->json([

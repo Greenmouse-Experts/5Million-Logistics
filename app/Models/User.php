@@ -30,6 +30,9 @@ class User extends Authenticatable
         'photo',
         'referrer_id',
         'status',
+        'city',
+        'state',
+        'country'
     ];
 
     /**

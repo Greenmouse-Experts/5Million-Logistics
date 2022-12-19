@@ -25,6 +25,9 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('agreement')->nullable();
             $table->string('photo')->nullable();
+            $table->string('city')->nullable();
+            $table->string('state')->nullable();
+            $table->string('country')->nullable();
             $table->string('referrer_id')->nullable();
             $table->string('password');
             $table->enum('status', ['Active', 'Inactive'])->default('Active')->index();
