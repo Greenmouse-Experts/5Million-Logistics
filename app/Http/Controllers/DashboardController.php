@@ -46,7 +46,7 @@ class DashboardController extends Controller
 
     public function update_profile(Request $request)
     {
-        $input = $request->only(['name', 'sex', 'phone_number']);
+        $input = $request->only(['name', 'sex', 'phone_number', 'city', 'state', 'country']);
 
         $validate_data = [
             'name' => ['required', 'string', 'max:255'],
@@ -163,8 +163,8 @@ class DashboardController extends Controller
         $user = User::findorfail(Auth::user()->id);
 
         $filename = request()->avatar->getClientOriginalName();
-        if($user->avatar) {
-            Storage::delete(str_replace("storage", "public", $user->avatar));
+        if($user->photo) {
+            Storage::delete(str_replace("storage", "public", $user->photo));
         }
         request()->avatar->storeAs('users_avatar', $filename, 'public');
         $user->photo = '/storage/users_avatar/'.$filename;
