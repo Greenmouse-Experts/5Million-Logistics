@@ -24,9 +24,9 @@ class AuthController extends Controller
     {
         $validator = Validator::make(request()->all(), [
             'account_type' => ['required', 'string', 'max:255'],
-            'name' => ['required', 'string', 'max:255'],
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'sex' => ['required', 'string', 'max:255'],
             'phone_number' => ['required', 'string', 'max:255'],
             'agreement' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
@@ -47,7 +47,6 @@ class AuthController extends Controller
                 'referral_code' => $this->referrer_id_generate(7),
                 'name' => ucfirst($request->name),
                 'email' => $request->email,
-                'sex' => ucfirst($request->sex),
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
                 'password' => Hash::make($request->password)
@@ -72,7 +71,6 @@ class AuthController extends Controller
                 'referral_code' => $this->referrer_id_generate(7),
                 'name' => ucfirst($request->name),
                 'email' => $request->email,
-                'sex' => ucfirst($request->sex),
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
                 'password' => Hash::make($request->password),
@@ -364,11 +362,6 @@ class AuthController extends Controller
                 'message' => 'Code does\'nt exist in our database'
             ]); 
         }
-    }
-
-    public function admin_login(Request $request)
-    {
-        return view('auth.admin_login');
     }
 
     public function post_admin_login(Request $request)

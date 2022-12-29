@@ -19,7 +19,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return response([
         'status' => true,
-        'message' => 'You are now on 5Million Logistics API Endpoints'
+        'message' => 'You are now on 5M Logistics API Endpoints'
     ]);
 });
 
@@ -47,8 +47,16 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // put all api protected routes here
     Route::middleware('auth:api')->group(function () {
         Route::post('/profile/update', [DashboardController::class, 'update_profile']);
-        Route::post('/profile/update/password', [DashboardController::class, 'update_password']);
-        Route::post('/profile/upload/profile-picture', [DashboardController::class, 'upload_profile_picture']);
+        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
+        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
+        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
+
+        Route::post('/add/pickup/service', [DashboardController::class, 'add_pickup_service']);
+        Route::post('/add/inter-state/service', [DashboardController::class, 'add_inter_state_service']);
+        Route::post('/add/freight', [DashboardController::class, 'add_freight']);
+        Route::post('/add/procurement', [DashboardController::class, 'add_procurement']);
+        Route::post('/add/express/shipping', [DashboardController::class, 'add_express_shipping']);
+        Route::post('/add/warehousing', [DashboardController::class, 'add_warehousing']);
 
 
         Route::post('logout', [DashboardController::class, 'logout']);
