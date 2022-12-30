@@ -45,7 +45,8 @@ class AuthController extends Controller
             $user = User::create([
                 'account_type' => $request->account_type,
                 'referral_code' => $this->referrer_id_generate(7),
-                'name' => ucfirst($request->name),
+                'first_name' => ucfirst($request->first_name),
+                'last_name' => ucfirst($request->last_name),
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
@@ -69,7 +70,8 @@ class AuthController extends Controller
             $user = User::create([
                 'account_type' => $request->account_type,
                 'referral_code' => $this->referrer_id_generate(7),
-                'name' => ucfirst($request->name),
+                'first_name' => ucfirst($request->first_name),
+                'last_name' => ucfirst($request->last_name),
                 'email' => $request->email,
                 'phone_number' => $request->phone_number,
                 'agreement' => $request->agreement,
