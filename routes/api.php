@@ -47,9 +47,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
     // put all api protected routes here
     Route::middleware('auth:api')->group(function () {
         Route::post('/profile/update', [DashboardController::class, 'update_profile']);
-        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
-        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
-        Route::post('/profile/update', [DashboardController::class, 'update_profile']);
+        Route::post('/profile/update/password', [DashboardController::class, 'update_password']);
+        Route::post('/profile/upload/profile-picture', [DashboardController::class, 'upload_profile_picture']);
 
         Route::post('/add/pickup/service', [DashboardController::class, 'add_pickup_service']);
         Route::post('/add/inter-state/service', [DashboardController::class, 'add_inter_state_service']);
@@ -57,7 +56,6 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('/add/procurement', [DashboardController::class, 'add_procurement']);
         Route::post('/add/express/shipping', [DashboardController::class, 'add_express_shipping']);
         Route::post('/add/warehousing', [DashboardController::class, 'add_warehousing']);
-
 
         Route::post('logout', [DashboardController::class, 'logout']);
 
