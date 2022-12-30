@@ -13,7 +13,7 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('freights', function (Blueprint $table) {
+        Schema::create('oversea_shippings', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
             $table->string('tracking_number')->nullable()->index();
@@ -53,6 +53,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('freights');
+        Schema::dropIfExists('oversea_shippings');
     }
 };

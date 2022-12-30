@@ -3,8 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\ExpressShipping;
-use App\Models\Freight;
 use App\Models\InterStateService;
+use App\Models\OverseaShipping;
 use App\Models\PickupService;
 use App\Models\Procurement;
 use App\Models\User;
@@ -155,7 +155,7 @@ class DashboardController extends Controller
         ]);
     }
     
-    public function add_freight(Request $request)
+    public function add_oversea_shipping(Request $request)
     {
         $validator = Validator::make(request()->all(), [
             'freight_service' => 'required|string|max:244|min:1',
@@ -190,7 +190,7 @@ class DashboardController extends Controller
             ]);
         }
 
-        $freight = Freight::create([
+        $overseashipping = OverseaShipping::create([
             'user_id' => Auth::user()->id,
             'tracking_number' => $this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
@@ -220,7 +220,7 @@ class DashboardController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Request sent successfully, kindly wait while the Administrator reviews your request. Thank you.',
-            'data' => $freight
+            'data' => $overseashipping
         ]);
     }
 
@@ -538,6 +538,138 @@ class DashboardController extends Controller
             'success' => true,
             'message' => 'Profile Picture Uploaded Successfully!',
             'data' => $user
+        ]);
+    }
+
+    public function count_pickup_service()
+    {
+        $userpickupService = PickupService::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Pickup Service Request',
+            'data' => $userpickupService
+        ]);
+    }
+
+    public function count_inter_state_service()
+    {
+        $userinterstateService = InterStateService::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Inter State Service Request',
+            'data' => $userinterstateService
+        ]);
+    }
+
+    public function count_oversea_shipping()
+    {
+        $useroverseashippingService = OverseaShipping::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Oversea Shipping Service Request',
+            'data' => $useroverseashippingService
+        ]);
+    }
+
+    public function count_procurement()
+    {
+        $userprocurementService = Procurement::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Procurement Service Request',
+            'data' => $userprocurementService
+        ]);
+    }
+
+    public function count_express_shipping()
+    {
+        $userexpressshippingService = ExpressShipping::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Express Shipping Service Request',
+            'data' => $userexpressshippingService
+        ]);
+    }
+
+    public function count_warehousing()
+    {
+        $userwarehousingService = Warehousing::latest()->where('user_id', Auth::user()->id)->get()->count();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Count User Warehousing Request',
+            'data' => $userwarehousingService
+        ]);
+    }
+
+    public function get_pickup_service()
+    {
+        $userpickupService = PickupService::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Pickup Service Request Retrieved Successfully',
+            'data' => $userpickupService
+        ]);
+    }
+
+    public function get_inter_state_service()
+    {
+        $userinterstateService = InterStateService::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Inter State Service Request Retrieved Successfully',
+            'data' => $userinterstateService
+        ]);
+    }
+
+    public function get_oversea_shipping()
+    {
+        $useroverseashippingService = OverseaShipping::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Oversea Shipping Service Request Retrieved Successfully',
+            'data' => $useroverseashippingService
+        ]);
+    }
+
+    public function get_procurement()
+    {
+        $userprocurementService = Procurement::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Procurement Service Request Retrieved Successfully',
+            'data' => $userprocurementService
+        ]);
+    }
+
+    public function get_express_shipping()
+    {
+        $userexpressshippingService = ExpressShipping::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Express Shipping Service Request Retrieved Successfully',
+            'data' => $userexpressshippingService
+        ]);
+    }
+
+    public function get_warehousing()
+    {
+        $userwarehousingService = Warehousing::latest()->where('user_id', Auth::user()->id)->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'User Warehousing Request Retrieved Successfully',
+            'data' => $userwarehousingService
         ]);
     }
 }

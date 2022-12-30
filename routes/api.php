@@ -52,10 +52,24 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
         Route::post('/add/pickup/service', [DashboardController::class, 'add_pickup_service']);
         Route::post('/add/inter-state/service', [DashboardController::class, 'add_inter_state_service']);
-        Route::post('/add/freight', [DashboardController::class, 'add_freight']);
+        Route::post('/add/oversea/shipping', [DashboardController::class, 'add_oversea_shipping']);
         Route::post('/add/procurement', [DashboardController::class, 'add_procurement']);
         Route::post('/add/express/shipping', [DashboardController::class, 'add_express_shipping']);
         Route::post('/add/warehousing', [DashboardController::class, 'add_warehousing']);
+
+        Route::get('/count/pickup/service', [DashboardController::class, 'count_pickup_service']);
+        Route::get('/count/inter-state/service', [DashboardController::class, 'count_inter_state_service']);
+        Route::get('/count/oversea/shipping', [DashboardController::class, 'count_oversea_shipping']);
+        Route::get('/count/procurement', [DashboardController::class, 'count_procurement']);
+        Route::get('/count/express/shipping', [DashboardController::class, 'count_express_shipping']);
+        Route::get('/count/warehousing', [DashboardController::class, 'count_warehousing']);
+
+        Route::get('/get/pickup/service', [DashboardController::class, 'get_pickup_service']);
+        Route::get('/get/inter-state/service', [DashboardController::class, 'get_inter_state_service']);
+        Route::get('/get/oversea/shipping', [DashboardController::class, 'get_oversea_shipping']);
+        Route::get('/get/procurement', [DashboardController::class, 'get_procurement']);
+        Route::get('/get/express/shipping', [DashboardController::class, 'get_express_shipping']);
+        Route::get('/get/warehousing', [DashboardController::class, 'get_warehousing']);
 
         Route::post('logout', [DashboardController::class, 'logout']);
 
