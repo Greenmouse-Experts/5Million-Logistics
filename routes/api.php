@@ -57,6 +57,20 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('/add/express/shipping', [DashboardController::class, 'add_express_shipping']);
         Route::post('/add/warehousing', [DashboardController::class, 'add_warehousing']);
 
+        Route::post('/update/pickup/service/{id}', [DashboardController::class, 'update_pickup_service']);
+        Route::post('/update/inter-state/service/{id}', [DashboardController::class, 'update_inter_state_service']);
+        Route::post('/update/oversea/shipping/{id}', [DashboardController::class, 'update_oversea_shipping']);
+        Route::post('/update/procurement/{id}', [DashboardController::class, 'update_procurement']);
+        Route::post('/update/express/shipping/{id}', [DashboardController::class, 'update_express_shipping']);
+        Route::post('/update/warehousing/{id}', [DashboardController::class, 'update_warehousing']);
+
+        Route::post('/cancel/pickup/service/{id}', [DashboardController::class, 'cancel_pickup_service']);
+        Route::post('/cancel/inter-state/service/{id}', [DashboardController::class, 'cancel_inter_state_service']);
+        Route::post('/cancel/oversea/shipping/{id}', [DashboardController::class, 'cancel_oversea_shipping']);
+        Route::post('/cancel/procurement/{id}', [DashboardController::class, 'cancel_procurement']);
+        Route::post('/cancel/express/shipping/{id}', [DashboardController::class, 'cancel_express_shipping']);
+        Route::post('/cancel/warehousing/{id}', [DashboardController::class, 'cancel_warehousing']);
+
         Route::get('/count/pickup/service', [DashboardController::class, 'count_pickup_service']);
         Route::get('/count/inter-state/service', [DashboardController::class, 'count_inter_state_service']);
         Route::get('/count/oversea/shipping', [DashboardController::class, 'count_oversea_shipping']);
@@ -70,6 +84,8 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('/get/procurement', [DashboardController::class, 'get_procurement']);
         Route::get('/get/express/shipping', [DashboardController::class, 'get_express_shipping']);
         Route::get('/get/warehousing', [DashboardController::class, 'get_warehousing']);
+
+        Route::get('/track/orders/{tracking_id}', [DashboardController::class, 'track_orders']);
 
         Route::post('logout', [DashboardController::class, 'logout']);
 

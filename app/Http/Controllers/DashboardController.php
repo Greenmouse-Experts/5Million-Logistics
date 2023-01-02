@@ -87,7 +87,7 @@ class DashboardController extends Controller
 
         $pickupService = PickupService::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'PUS-'.$this->tracking_number_generate(10),
             'pickup_vehicle' => $request->pickup_vehicle,
             'pickup_address' => $request->pickup_address,
             'dropoff_address' => $request->dropoff_address,
@@ -133,7 +133,7 @@ class DashboardController extends Controller
 
         $interStateService = InterStateService::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'ISS-'.$this->tracking_number_generate(10),
             'package_address' => $request->package_address,
             'dropoff_address' => $request->dropoff_address,
             'sender_address' => $request->sender_address,
@@ -192,7 +192,7 @@ class DashboardController extends Controller
 
         $overseashipping = OverseaShipping::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'OSS-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -260,7 +260,7 @@ class DashboardController extends Controller
 
         $procurement = Procurement::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'PCM-'.$this->tracking_number_generate(10),
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
             'item_store_name' => $request->item_store_name,
@@ -328,7 +328,7 @@ class DashboardController extends Controller
 
         $expressShipping = ExpressShipping::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'EXS-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -371,7 +371,7 @@ class DashboardController extends Controller
             'package_value' => 'required|string|max:244|min:1',
             'package_description' => 'required|string|max:244|min:1',
             'storage_start_date' => 'required|date',
-            'storage_end_date' => 'required|date',
+            'storage_end_date' => 'required|date|after:storage_start_date',
             'owner_full_name' => 'required|string|max:244|min:1',
             'owner_address' => 'required|string|max:244|min:1',
             'owner_phone_number' => 'required|string|max:244|min:1',
@@ -387,7 +387,7 @@ class DashboardController extends Controller
 
         $warehousing = Warehousing::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => $this->tracking_number_generate(10),
+            'tracking_number' => 'WAH-'.$this->tracking_number_generate(10),
             'warehouse_location' => $request->warehouse_location,
             'package_name' => $request->package_name,
             'package_quantity' => $request->package_quantity,
@@ -406,6 +406,522 @@ class DashboardController extends Controller
             'success' => true,
             'message' => 'Request sent successfully, kindly wait while the Administrator reviews your request. Thank you.',
             'data' => $warehousing
+        ]);
+    }
+
+    public function update_pickup_service($id, Request $request)
+    {
+        $pickupService = PickupService::findorfail($id);
+
+        if($pickupService->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'pickup_vehicle' => 'required|string|max:244|min:1',
+                'pickup_address' => 'required|string|max:244|min:1',
+                'dropoff_address' => 'required|string|max:244|min:1',
+                'sender_address' => 'required|string|max:244|min:1',
+                'sender_name' => 'required|string|max:244|min:1',
+                'sender_phone_number' => 'required|string|max:244|min:1',
+                'receiver_address' => 'required|string|max:244|min:1',
+                'receiver_name' => 'required|string|max:244|min:1',
+                'receiver_phone_number' => 'required|string|max:244|min:1'
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $pickupService->update([
+                'pickup_vehicle' => $request->pickup_vehicle,
+                'pickup_address' => $request->pickup_address,
+                'dropoff_address' => $request->dropoff_address,
+                'sender_address' => $request->sender_address,
+                'sender_name' => $request->sender_name,
+                'sender_phone_number' => $request->sender_phone_number,
+                'receiver_address' => $request->receiver_address,
+                'receiver_name' => $request->receiver_name,
+                'receiver_phone_number' => $request->receiver_phone_number,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $pickupService
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function update_inter_state_service($id, Request $request)
+    {
+        $interStateService = InterStateService::findorfail($id);
+
+        if($interStateService->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'package_address' => 'required|string|max:244|min:1',
+                'dropoff_address' => 'required|string|max:244|min:1',
+                'sender_address' => 'required|string|max:244|min:1',
+                'sender_name' => 'required|string|max:244|min:1',
+                'sender_phone_number' => 'required|string|max:244|min:1',
+                'receiver_address' => 'required|string|max:244|min:1',
+                'receiver_name' => 'required|string|max:244|min:1',
+                'receiver_phone_number' => 'required|string|max:244|min:1',
+                'dimension' => 'required|string|max:244|min:1',
+                'weight' => 'required|string|max:244|min:1',
+                'value' => 'required|string|max:244|min:1',
+                'description' => 'required|string|max:244|min:1',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $interStateService->update([
+                'package_address' => $request->package_address,
+                'dropoff_address' => $request->dropoff_address,
+                'sender_address' => $request->sender_address,
+                'sender_name' => $request->sender_name,
+                'sender_phone_number' => $request->sender_phone_number,
+                'receiver_address' => $request->receiver_address,
+                'receiver_name' => $request->receiver_name,
+                'receiver_phone_number' => $request->receiver_phone_number,
+                'dimension' => $request->dimension,
+                'weight' => $request->weight,
+                'value' => $request->value,
+                'description' => $request->description,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $interStateService
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+    
+    public function update_oversea_shipping($id, Request $request)
+    {
+        $overseashipping = OverseaShipping::findorfail($id);
+
+        if($overseashipping->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'freight_service' => 'required|string|max:244|min:1',
+                'owner_full_name' => 'required|string|max:244|min:1',
+                'owner_address' => 'required|string|max:244|min:1',
+                'owner_email' => 'required|string|email|max:244|min:1',
+                'owner_phone_number' => 'required|string|max:244|min:1',
+                'date_of_shipment' => 'required|date',
+                'shipping_from_street_address' => 'required|string|max:244|min:1',
+                'shipping_from_city' => 'required|string|max:244|min:1',
+                'shipping_from_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_from_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_from_country' => 'required|string|max:244|min:1',
+                'shipping_to_street_address' => 'required|string|max:244|min:1',
+                'shipping_to_city' => 'required|string|max:244|min:1',
+                'shipping_to_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_to_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_to_country' => 'required|string|max:244|min:1',
+                'package_name' => 'required|string|max:244|min:1',
+                'package_quantity' => 'required|string|max:244|min:1',
+                'package_dimension' => 'required|string|max:244|min:1',
+                'package_weight' => 'required|string|max:244|min:1',
+                'package_value' => 'required|string|max:244|min:1',
+                'package_description' => 'required|string|max:244|min:1',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $overseashipping->update([
+                'freight_service' => $request->freight_service,
+                'owner_full_name' => $request->owner_full_name,
+                'owner_address' => $request->owner_address,
+                'owner_email' => $request->owner_email,
+                'owner_phone_number' => $request->owner_phone_number,
+                'date_of_shipment' => $request->date_of_shipment,
+                'shipping_from_street_address' => $request->shipping_from_street_address,
+                'shipping_from_city' => $request->shipping_from_city,
+                'shipping_from_state_province_region' => $request->shipping_from_state_province_region,
+                'shipping_from_zip_portal_code' => $request->shipping_from_zip_portal_code,
+                'shipping_from_country' => $request->shipping_from_country,
+                'shipping_to_street_address' => $request->shipping_to_street_address,
+                'shipping_to_city' => $request->shipping_to_city,
+                'shipping_to_state_province_region' => $request->shipping_to_state_province_region,
+                'shipping_to_zip_portal_code' => $request->shipping_to_zip_portal_code,
+                'shipping_to_country' => $request->shipping_to_country,
+                'package_name' => $request->package_name,
+                'package_quantity' => $request->package_quantity,
+                'package_dimension' => $request->package_dimension,
+                'package_weight' => $request->package_weight,
+                'package_value' => $request->package_value,
+                'package_description' => $request->package_description,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $overseashipping
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function update_procurement($id, Request $request)
+    {
+        $procurement = Procurement::findorfail($id);
+
+        if($procurement->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'item_name' => 'required|string|max:244|min:1',
+                'item_type' => 'required|string|max:244|min:1',
+                'item_store_name' => 'required|string|max:244|min:1',
+                'item_description' => 'required|string|max:244|min:1',
+                'item_tracking_id' => 'max:244',
+                'item_value' => 'required|string|max:244|min:1',
+                'owner_full_name' => 'required|string|max:244|min:1',
+                'owner_address' => 'required|string|max:244|min:1',
+                'owner_email' => 'required|string|email|max:244|min:1',
+                'owner_phone_number' => 'required|string|max:244|min:1',
+                'date_of_shipment' => 'required|date',
+                'shipping_from_street_address' => 'required|string|max:244|min:1',
+                'shipping_from_city' => 'required|string|max:244|min:1',
+                'shipping_from_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_from_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_from_country' => 'required|string|max:244|min:1',
+                'shipping_to_street_address' => 'required|string|max:244|min:1',
+                'shipping_to_city' => 'required|string|max:244|min:1',
+                'shipping_to_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_to_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_to_country' => 'required|string|max:244|min:1',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $procurement->update([
+                'item_name' => $request->item_name,
+                'item_type' => $request->item_type,
+                'item_store_name' => $request->item_store_name,
+                'item_description' => $request->item_description,
+                'item_tracking_id' => $request->item_tracking_id,
+                'item_value' => $request->item_value,
+                'owner_full_name' => $request->owner_full_name,
+                'owner_address' => $request->owner_address,
+                'owner_email' => $request->owner_email,
+                'owner_phone_number' => $request->owner_phone_number,
+                'date_of_shipment' => $request->date_of_shipment,
+                'shipping_from_street_address' => $request->shipping_from_street_address,
+                'shipping_from_city' => $request->shipping_from_city,
+                'shipping_from_state_province_region' => $request->shipping_from_state_province_region,
+                'shipping_from_zip_portal_code' => $request->shipping_from_zip_portal_code,
+                'shipping_from_country' => $request->shipping_from_country,
+                'shipping_to_street_address' => $request->shipping_to_street_address,
+                'shipping_to_city' => $request->shipping_to_city,
+                'shipping_to_state_province_region' => $request->shipping_to_state_province_region,
+                'shipping_to_zip_portal_code' => $request->shipping_to_zip_portal_code,
+                'shipping_to_country' => $request->shipping_to_country,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $procurement
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function update_express_shipping($id, Request $request)
+    {
+        $expressShipping = Procurement::findorfail($id);
+
+        if($expressShipping->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'freight_service' => 'required|string|max:244|min:1',
+                'owner_full_name' => 'required|string|max:244|min:1',
+                'owner_address' => 'required|string|max:244|min:1',
+                'owner_email' => 'required|string|email|max:244|min:1',
+                'owner_phone_number' => 'required|string|max:244|min:1',
+                'date_of_shipment' => 'required|date',
+                'shipping_from_street_address' => 'required|string|max:244|min:1',
+                'shipping_from_city' => 'required|string|max:244|min:1',
+                'shipping_from_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_from_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_from_country' => 'required|string|max:244|min:1',
+                'shipping_to_street_address' => 'required|string|max:244|min:1',
+                'shipping_to_city' => 'required|string|max:244|min:1',
+                'shipping_to_state_province_region' => 'required|string|max:244|min:1',
+                'shipping_to_zip_portal_code' => 'required|string|max:244|min:1',
+                'shipping_to_country' => 'required|string|max:244|min:1',
+                'package_name' => 'required|string|max:244|min:1',
+                'package_quantity' => 'required|numeric',
+                'package_dimension' => 'required|string|max:244|min:1',
+                'package_weight' => 'required|string|max:244|min:1',
+                'package_value' => 'required|string|max:244|min:1',
+                'package_description' => 'required|string|max:244|min:1',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $expressShipping->update([
+                'user_id' => Auth::user()->id,
+                'tracking_number' => $this->tracking_number_generate(10),
+                'freight_service' => $request->freight_service,
+                'owner_full_name' => $request->owner_full_name,
+                'owner_address' => $request->owner_address,
+                'owner_email' => $request->owner_email,
+                'owner_phone_number' => $request->owner_phone_number,
+                'date_of_shipment' => $request->date_of_shipment,
+                'shipping_from_street_address' => $request->shipping_from_street_address,
+                'shipping_from_city' => $request->shipping_from_city,
+                'shipping_from_state_province_region' => $request->shipping_from_state_province_region,
+                'shipping_from_zip_portal_code' => $request->shipping_from_zip_portal_code,
+                'shipping_from_country' => $request->shipping_from_country,
+                'shipping_to_street_address' => $request->shipping_to_street_address,
+                'shipping_to_city' => $request->shipping_to_city,
+                'shipping_to_state_province_region' => $request->shipping_to_state_province_region,
+                'shipping_to_zip_portal_code' => $request->shipping_to_zip_portal_code,
+                'shipping_to_country' => $request->shipping_to_country,
+                'package_name' => $request->package_name,
+                'package_quantity' => $request->package_quantity,
+                'package_dimension' => $request->package_dimension,
+                'package_weight' => $request->package_weight,
+                'package_value' => $request->package_value,
+                'package_description' => $request->package_description,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $expressShipping
+            ]);
+        } 
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function update_warehousing($id, Request $request)
+    {
+        $warehousing = Warehousing::findorfail($id);
+
+        if($warehousing->status == 'Pending')
+        {
+            $validator = Validator::make(request()->all(), [
+                'warehouse_location' => 'required|string|max:244|min:1',
+                'package_name' => 'required|string|max:244|min:1',
+                'package_quantity' => 'required|numeric',
+                'package_dimension' => 'required|string|max:244|min:1',
+                'package_weight' => 'required|string|max:244|min:1',
+                'package_value' => 'required|string|max:244|min:1',
+                'package_description' => 'required|string|max:244|min:1',
+                'storage_start_date' => 'required|date',
+                'storage_end_date' => 'required|date|after:storage_start_date',
+                'owner_full_name' => 'required|string|max:244|min:1',
+                'owner_address' => 'required|string|max:244|min:1',
+                'owner_phone_number' => 'required|string|max:244|min:1',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $warehousing->update([
+                'warehouse_location' => $request->warehouse_location,
+                'package_name' => $request->package_name,
+                'package_quantity' => $request->package_quantity,
+                'package_dimension' => $request->package_dimension,
+                'package_weight' => $request->package_weight,
+                'package_value' => $request->package_value,
+                'package_description' => $request->package_description,
+                'storage_start_date' => $request->storage_start_date,
+                'storage_end_date' => $request->storage_end_date,
+                'owner_full_name' => $request->owner_full_name,
+                'owner_address' => $request->owner_address,
+                'owner_phone_number' => $request->owner_phone_number,
+            ]);
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Updated Successfully.',
+                'data' => $warehousing
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function cancel_pickup_service($id)
+    {
+        $pickupService = PickupService::findorfail($id);
+
+        if($pickupService->status == 'Pending')
+        {
+            $pickupService->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function cancel_inter_state_service($id)
+    {
+        $interStateService = InterStateService::findorfail($id);
+
+        if($interStateService->status == 'Pending')
+        {
+            $interStateService->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+    
+    public function cancel_oversea_shipping($id)
+    {
+        $overseashipping = OverseaShipping::findorfail($id);
+
+        if($overseashipping->status == 'Pending')
+        {
+            $overseashipping->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled.'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function cancel_procurement($id)
+    {
+        $procurement = Procurement::findorfail($id);
+
+        if($procurement->status == 'Pending')
+        {
+            $procurement->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function cancel_express_shipping($id)
+    {
+        $expressShipping = ExpressShipping::findorfail($id);
+
+        if($expressShipping->status == 'Pending')
+        {
+            $expressShipping->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled'
+            ]);
+        } 
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
+        ]);
+    }
+
+    public function cancel_warehousing($id)
+    {
+        $warehousing = Warehousing::findorfail($id);
+
+        if($warehousing->status == 'Pending')
+        {
+            $warehousing->delete();
+    
+            return response()->json([
+                'success' => true,
+                'message' => 'Request Cancelled'
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Request not completed, it accepts only when the request sent is pending.',
         ]);
     }
 
@@ -671,5 +1187,123 @@ class DashboardController extends Controller
             'message' => 'User Warehousing Request Retrieved Successfully',
             'data' => $userwarehousingService
         ]);
+    }
+
+    public function track_orders($tracking_id)
+    {
+        $result = substr($tracking_id, 0, 3);
+
+        if(strtoupper($result) == 'PUS')
+        {
+            $order = PickupService::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'ISS')
+        {
+            $order = InterStateService::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'OSS')
+        {
+            $order = OverseaShipping::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'PCM')
+        {
+            $order = Procurement::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'EXS')
+        {
+            $order = ExpressShipping::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'WAH')
+        {
+            $order = Warehousing::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+           
+        return response()->json([
+            'success' => false,
+            'message' => 'No Details found. Try to search again !',
+        ]); 
     }
 }
