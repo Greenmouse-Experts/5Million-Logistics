@@ -31,6 +31,7 @@ class AuthController extends Controller
             'phone_number' => ['required', 'string', 'max:255'],
             'agreement' => ['required', 'string', 'max:255'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'g-recaptcha-response' => 'required|captcha',
         ]);
 
         if ($validator->fails()) {
