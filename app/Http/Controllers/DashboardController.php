@@ -88,7 +88,7 @@ class DashboardController extends Controller
         $pickupService = PickupService::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'PUS-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'PUS-ORD-'.$this->tracking_number_generate(10),
             'pickup_vehicle' => $request->pickup_vehicle,
             'pickup_address' => $request->pickup_address,
             'dropoff_address' => $request->dropoff_address,
@@ -135,7 +135,7 @@ class DashboardController extends Controller
         $interStateService = InterStateService::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'ISS-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'ISS-ORD-'.$this->tracking_number_generate(10),
             'package_address' => $request->package_address,
             'dropoff_address' => $request->dropoff_address,
             'sender_address' => $request->sender_address,
@@ -195,7 +195,7 @@ class DashboardController extends Controller
         $overseashipping = OverseaShipping::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'OSS-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'OSS-ORD-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -264,7 +264,7 @@ class DashboardController extends Controller
         $procurement = Procurement::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'PCM-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'PCM-ORD-'.$this->tracking_number_generate(10),
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
             'item_store_name' => $request->item_store_name,
@@ -333,7 +333,7 @@ class DashboardController extends Controller
         $expressShipping = ExpressShipping::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'EXS-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'EXS-ORD-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -393,7 +393,7 @@ class DashboardController extends Controller
         $warehousing = Warehousing::create([
             'user_id' => Auth::user()->id,
             // 'tracking_number' => 'WAH-'.$this->tracking_number_generate(10),
-            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
+            'order_id' => 'WAH-ORD-'.$this->tracking_number_generate(10),
             'warehouse_location' => $request->warehouse_location,
             'package_name' => $request->package_name,
             'package_quantity' => $request->package_quantity,
@@ -1292,6 +1292,124 @@ class DashboardController extends Controller
         if(strtoupper($result) == 'WAH')
         {
             $order = Warehousing::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+           
+        return response()->json([
+            'success' => false,
+            'message' => 'No Details found. Try to search again !',
+        ]); 
+    }
+
+    public function get_orders_by_order_id($order_id)
+    {
+        $result = substr($order_id, 0, 3);
+
+        if(strtoupper($result) == 'PUS')
+        {
+            $order = PickupService::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'ISS')
+        {
+            $order = InterStateService::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'OSS')
+        {
+            $order = OverseaShipping::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'PCM')
+        {
+            $order = Procurement::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'EXS')
+        {
+            $order = ExpressShipping::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'WAH')
+        {
+            $order = Warehousing::where('order_id','LIKE','%'.$order_id.'%')->get();
 
             if(count($order) > 0) {
                 return response()->json([

@@ -86,6 +86,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::get('/get/express/shipping', [DashboardController::class, 'get_express_shipping']);
         Route::get('/get/warehousing', [DashboardController::class, 'get_warehousing']);
 
+        Route::get('/get/orders/by/order_id/{order_id}', [DashboardController::class, 'get_orders_by_order_id']);
         Route::get('/track/orders/{tracking_id}', [DashboardController::class, 'track_orders']);
 
         Route::post('logout', [DashboardController::class, 'logout']);
