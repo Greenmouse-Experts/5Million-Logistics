@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('pickup_services', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('service_type')->default('Pickup')->index();
+            $table->string('order_id')->nullable()->index();
             $table->string('tracking_number')->nullable()->index();
             $table->string('pickup_vehicle')->nullable();
             $table->string('pickup_address')->nullable();
@@ -28,7 +30,9 @@ return new class extends Migration
             $table->string('receiver_phone_number')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
-            $table->string('status')->default('Pending')->index();
+            $table->string('status')->default('New')->index();
+            $table->string('progress')->nullable();
+            $table->string('current_location')->nullable();
             $table->timestamps();
         });
     }

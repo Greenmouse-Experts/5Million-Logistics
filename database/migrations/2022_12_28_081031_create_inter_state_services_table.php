@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('inter_state_services', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('service_type')->default('InterState')->index();
+            $table->string('order_id')->nullable()->index();
             $table->string('tracking_number')->nullable()->index();
             $table->string('package_address')->nullable();
             $table->string('dropoff_address')->nullable();
@@ -31,7 +33,9 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
-            $table->string('status')->default('Pending')->index();
+            $table->string('status')->default('New')->index();
+            $table->string('progress')->nullable();
+            $table->string('current_location')->nullable();
             $table->timestamps();
         });
     }

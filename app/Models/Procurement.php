@@ -16,6 +16,8 @@ class Procurement extends Model
      */
     protected $fillable = [
         'user_id',
+        'service_type',
+        'order_id',
         'tracking_number',
         'item_name',
         'item_type',
@@ -42,4 +44,9 @@ class Procurement extends Model
         'comment',
         'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

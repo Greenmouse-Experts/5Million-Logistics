@@ -16,6 +16,8 @@ class PickupService extends Model
      */
     protected $fillable = [
         'user_id',
+        'service_type',
+        'order_id',
         'tracking_number',
         'pickup_vehicle',
         'pickup_address',
@@ -28,6 +30,13 @@ class PickupService extends Model
         'receiver_phone_number',
         'price',
         'comment',
-        'status'
+        'status',
+        'progress',
+        'current_location',
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

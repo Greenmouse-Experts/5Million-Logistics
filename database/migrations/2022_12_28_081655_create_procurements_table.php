@@ -16,6 +16,8 @@ return new class extends Migration
         Schema::create('procurements', function (Blueprint $table) {
             $table->id();
             $table->string('user_id')->nullable();
+            $table->string('service_type')->default('Procurement')->index();
+            $table->string('order_id')->nullable()->index();
             $table->string('tracking_number')->nullable()->index();
             $table->string('item_name')->nullable();
             $table->string('item_type')->nullable();
@@ -40,7 +42,7 @@ return new class extends Migration
             $table->string('shipping_to_country')->nullable();
             $table->string('price')->nullable();
             $table->string('comment')->nullable();
-            $table->string('status')->default('Pending')->index();
+            $table->string('status')->default('New')->index();
             $table->timestamps();
         });
     }

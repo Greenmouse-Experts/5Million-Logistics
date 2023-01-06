@@ -16,6 +16,8 @@ class Warehousing extends Model
      */
     protected $fillable = [
         'user_id',
+        'service_type',
+        'order_id',
         'tracking_number',
         'warehouse_location',
         'package_name',
@@ -33,4 +35,9 @@ class Warehousing extends Model
         'comment',
         'status'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

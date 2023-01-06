@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use Illuminate\Http\Request;
@@ -91,10 +92,15 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
         // Administrator
         Route::middleware(['auth', 'isAdmin'])->group(function () {
-            Route::post('/admin/add/service', [AdminController::class, 'add_service']);
-            Route::post('/admin/update/service/{id}', [AdminController::class, 'update_service']);
-            Route::delete('/admin/delete/service/{id}', [AdminController::class, 'delete_service']);
-            Route::get('/admin/get/services', [AdminController::class, 'services']);
+            Route::get('/admin/get/all/user/customer', [AdminController::class, 'get_all_user_customer']);
+            Route::get('/admin/get/all/user/partner', [AdminController::class, 'get_all_user_partner']);
+            // Service
+            Route::get('/admin/get/all/pickup/service', [AdminController::class, 'get_all_pickup_service']);
+            Route::get('/admin/get/all/inter-state/service', [AdminController::class, 'get_all_inter_state_service']);
+            Route::get('/admin/get/all/oversea/shipping', [AdminController::class, 'get_all_oversea_shipping']);
+            Route::get('/admin/get/all/procurement', [AdminController::class, 'get_all_procurement']);
+            Route::get('/admin/get/all/express/shipping', [AdminController::class, 'get_all_express_shipping']);
+            Route::get('/admin/get/all/warehousing', [AdminController::class, 'get_all_warehousing']);
         });
     });
     

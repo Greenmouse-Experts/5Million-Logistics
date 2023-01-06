@@ -16,6 +16,8 @@ class ExpressShipping extends Model
      */
     protected $fillable = [
         'user_id',
+        'service_type',
+        'order_id',
         'tracking_number',
         'freight_service',
         'owner_full_name',
@@ -41,6 +43,13 @@ class ExpressShipping extends Model
         'package_description',
         'price',
         'comment',
-        'status'
+        'status',
+        'progress',
+        'current_location'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

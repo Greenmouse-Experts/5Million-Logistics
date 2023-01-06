@@ -16,6 +16,8 @@ class InterStateService extends Model
      */
     protected $fillable = [
         'user_id',
+        'service_type',
+        'order_id',
         'tracking_number',
         'package_address',
         'dropoff_address',
@@ -31,6 +33,13 @@ class InterStateService extends Model
         'description',
         'price',
         'comment',
-        'status'
+        'status',
+        'progress',
+        'current_location'
     ];
+
+    public function user()
+    {
+        return $this->belongsTo(User::class);
+    }
 }

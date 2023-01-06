@@ -87,7 +87,8 @@ class DashboardController extends Controller
 
         $pickupService = PickupService::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'PUS-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'PUS-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'pickup_vehicle' => $request->pickup_vehicle,
             'pickup_address' => $request->pickup_address,
             'dropoff_address' => $request->dropoff_address,
@@ -133,7 +134,8 @@ class DashboardController extends Controller
 
         $interStateService = InterStateService::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'ISS-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'ISS-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'package_address' => $request->package_address,
             'dropoff_address' => $request->dropoff_address,
             'sender_address' => $request->sender_address,
@@ -192,7 +194,8 @@ class DashboardController extends Controller
 
         $overseashipping = OverseaShipping::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'OSS-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'OSS-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -260,7 +263,8 @@ class DashboardController extends Controller
 
         $procurement = Procurement::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'PCM-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'PCM-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'item_name' => $request->item_name,
             'item_type' => $request->item_type,
             'item_store_name' => $request->item_store_name,
@@ -328,7 +332,8 @@ class DashboardController extends Controller
 
         $expressShipping = ExpressShipping::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'EXS-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'EXS-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'freight_service' => $request->freight_service,
             'owner_full_name' => $request->owner_full_name,
             'owner_address' => $request->owner_address,
@@ -387,7 +392,8 @@ class DashboardController extends Controller
 
         $warehousing = Warehousing::create([
             'user_id' => Auth::user()->id,
-            'tracking_number' => 'WAH-'.$this->tracking_number_generate(10),
+            // 'tracking_number' => 'WAH-'.$this->tracking_number_generate(10),
+            'order_id' => 'ORD-'.$this->tracking_number_generate(10),
             'warehouse_location' => $request->warehouse_location,
             'package_name' => $request->package_name,
             'package_quantity' => $request->package_quantity,
@@ -809,7 +815,7 @@ class DashboardController extends Controller
     {
         $pickupService = PickupService::findorfail($id);
 
-        if($pickupService->status == 'Pending')
+        if($pickupService->status == 'New')
         {
             $pickupService->delete();
     
@@ -829,7 +835,7 @@ class DashboardController extends Controller
     {
         $interStateService = InterStateService::findorfail($id);
 
-        if($interStateService->status == 'Pending')
+        if($interStateService->status == 'New')
         {
             $interStateService->delete();
     
@@ -849,7 +855,7 @@ class DashboardController extends Controller
     {
         $overseashipping = OverseaShipping::findorfail($id);
 
-        if($overseashipping->status == 'Pending')
+        if($overseashipping->status == 'New')
         {
             $overseashipping->delete();
     
@@ -869,7 +875,7 @@ class DashboardController extends Controller
     {
         $procurement = Procurement::findorfail($id);
 
-        if($procurement->status == 'Pending')
+        if($procurement->status == 'New')
         {
             $procurement->delete();
     
@@ -889,7 +895,7 @@ class DashboardController extends Controller
     {
         $expressShipping = ExpressShipping::findorfail($id);
 
-        if($expressShipping->status == 'Pending')
+        if($expressShipping->status == 'New')
         {
             $expressShipping->delete();
     
@@ -909,7 +915,7 @@ class DashboardController extends Controller
     {
         $warehousing = Warehousing::findorfail($id);
 
-        if($warehousing->status == 'Pending')
+        if($warehousing->status == 'New')
         {
             $warehousing->delete();
     
