@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\ExpressShippingResource;
 use App\Http\Resources\InterStateResource;
+use App\Http\Resources\OrderBoardResource;
 use App\Http\Resources\OverseaShippingResource;
 use App\Http\Resources\PickupResource;
 use App\Http\Resources\ProcurementResource;
@@ -11,6 +12,7 @@ use App\Http\Resources\UserResource;
 use App\Http\Resources\WarehousingResource;
 use App\Models\ExpressShipping;
 use App\Models\InterStateService;
+use App\Models\OrderBoard;
 use App\Models\OverseaShipping;
 use App\Models\PickupService;
 use App\Models\Procurement;
@@ -18,6 +20,8 @@ use App\Models\User;
 use App\Models\Warehousing;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
@@ -41,6 +45,153 @@ class AdminController extends Controller
             'message' => 'All Partner User',
             'data' => UserResource::collection($partner)
         ]);
+    }
+
+    public function get_user($id)
+    {
+        $user = User::find($id);
+
+        if($user)
+        {
+            return response()->json([
+                'success' => true,
+                'message' => 'User Retrieved Successfully!',
+                'data' => new UserResource($user)
+            ]);
+        }
+        
+        return response()->json([
+            'success' => false,
+            'message' => 'User Not Found'
+        ]);
+    }
+
+    public function user_deactivate($id)
+    {
+        $user = User::find($id);
+
+        $user->update([
+            'status' => 'Inactive'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $user->first_name.' '.$user->last_name . ' Account Deactivated!',
+            'data' => $user
+        ]);
+    }
+
+    public function user_activate($id)
+    {
+        $user = User::find($id);
+
+        $user->update([
+            'status' => 'Active'
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => $user->first_name.' '.$user->last_name . ' Account Activated!',
+            'data' => $user
+        ]);
+    }
+
+    public function user_change_password($id, Request $request)
+    {
+        $validator = Validator::make(request()->all(), [
+            'new_password' => ['required', 'string', 'min:8', 'confirmed']
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please see errors parameter for all errors.',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $user = User::findorfail($id);
+        
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        return response()->json([
+            'success' => true,
+            'message' => $user->first_name.' '.$user->last_name. ' Password Updated.',
+            'data' => $user
+        ]);
+    }
+
+    public function update_user_profile($id, Request $request)
+    {
+        $input = $request->only(['first_name', 'last_name', 'phone_number']);
+
+        $validate_data = [
+            'first_name' => ['required', 'string', 'max:255'],
+            'last_name' => ['required', 'string', 'max:255'],
+            'phone_number' => ['required', 'string', 'max:255']
+        ];
+
+        $validator = Validator::make($input, $validate_data);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Please see errors parameter for all errors.',
+                'errors' => $validator->errors()
+            ]);
+        }
+
+        $user = User::findorfail($id);
+        
+        if($user->email == $request->email)
+        {
+            $user->update([
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'gender' => $request->gender,
+                'phone_number' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country
+            ]); 
+
+            return response()->json([
+                'success' => true,
+                'message' => $user->first_name. ' ' .$user->last_name. ' Profile Updated Successfully!',
+                'data' => $user
+            ]);
+        } else {
+            //Validate Request
+            $validator = Validator::make(request()->all(), [
+                'email' => ['string', 'email', 'max:255', 'unique:users'],
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $user->update([
+                'email' => $request->email,
+                'first_name' => $request->first_name,
+                'last_name' => $request->last_name,
+                'gender' => $request->gender,
+                'phone_number' => $request->phone_number,
+                'city' => $request->city,
+                'state' => $request->state,
+                'country' => $request->country
+            ]); 
+
+            return response()->json([
+                'success' => true,
+                'message' => $user->first_name. ' ' .$user->last_name. ' Profile Updated Successfully!',
+                'data' => $user
+            ]);
+        }
     }
 
     public function get_all_pickup_service()
@@ -107,5 +258,178 @@ class AdminController extends Controller
             'message' => 'All Warehousing Request Retrieved Successfully',
             'data' => WarehousingResource::collection($userwarehousingService)
         ]);
+    }
+
+    public function dispatch_order($order_id)
+    {
+        $result = substr($order_id, 0, 7);
+
+        if(strtoupper($result) == 'PUS-ORD')
+        {
+            $order = PickupService::where('order_id', $order_id)->first();
+
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'ISS-ORD')
+        {
+            $order = InterStateService::where('order_id', $order_id)->first();
+            
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'OSS-ORD')
+        {
+            $order = OverseaShipping::where('order_id', $order_id)->first();
+
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'PCM-ORD')
+        {
+            $order = Procurement::where('order_id', $order_id)->first();
+
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'EXS-ORD')
+        {
+            $order = ExpressShipping::where('order_id', $order_id)->first();
+
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'WAH-ORD')
+        {
+            $order = Warehousing::where('order_id', $order_id)->first();
+
+            if($order) {
+                $orderboard = OrderBoard::create([
+                    'service_id' => $order->id,
+                    'service_type' => $order->service_type
+                ]);
+
+                $order->update([
+                    'status' => 'Dispatch'
+                ]);
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Dispatched Successfully',
+                    'data' => new OrderBoardResource($orderboard)
+                ]);
+
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found!',
+                ]); 
+            }
+        }
+           
+        return response()->json([
+            'success' => false,
+            'message' => "Order ID can't be found in our database!",
+        ]); 
     }
 }

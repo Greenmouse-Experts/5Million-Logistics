@@ -811,124 +811,183 @@ class DashboardController extends Controller
         ]);
     }
 
-    public function cancel_pickup_service($id)
+    public function cancel_order($order_id)
     {
-        $pickupService = PickupService::findorfail($id);
+        $result = substr($order_id, 0, 7);
 
-        if($pickupService->status == 'New')
+        if(strtoupper($result) == 'PUS-ORD')
         {
-            $pickupService->delete();
-    
+            $pickupService = PickupService::where('order_id',$order_id)->first();
+
+            if($pickupService)
+            {
+                if($pickupService->status == 'New')
+                {
+                    $pickupService->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled.'
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+            }
+
             return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled.'
+                'success' => false,
+                'message' => 'Not Found.',
             ]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
-    }
-
-    public function cancel_inter_state_service($id)
-    {
-        $interStateService = InterStateService::findorfail($id);
-
-        if($interStateService->status == 'New')
+        if(strtoupper($result) == 'ISS-ORD')
         {
-            $interStateService->delete();
-    
+            $interStateService = InterStateService::where('order_id', $order_id)->first();
+
+            if($interStateService)
+            {
+                if($interStateService->status == 'New')
+                {
+                    $interStateService->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled.'
+                    ]);
+                }
+                
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+            } 
+
             return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled.'
+                'success' => false,
+                'message' => 'Not Found.',
             ]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
-    }
-    
-    public function cancel_oversea_shipping($id)
-    {
-        $overseashipping = OverseaShipping::findorfail($id);
-
-        if($overseashipping->status == 'New')
+        if(strtoupper($result) == 'OSS-ORD')
         {
-            $overseashipping->delete();
-    
+            $overseashipping = OverseaShipping::where('order_id', $order_id)->first();
+
+            if($overseashipping)
+            {
+                if($overseashipping->status == 'New')
+                {
+                    $overseashipping->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled.'
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+
+            } 
+
             return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled.'
+                'success' => false,
+                'message' => 'Not Found.',
             ]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
-    }
-
-    public function cancel_procurement($id)
-    {
-        $procurement = Procurement::findorfail($id);
-
-        if($procurement->status == 'New')
+        if(strtoupper($result) == 'PCM-ORD')
         {
-            $procurement->delete();
-    
+            $procurement = Procurement::where('order_id', $order_id)->first();
+
+            if($procurement)
+            {
+                if($procurement->status == 'New')
+                {
+                    $procurement->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled'
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+            }
+
             return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled'
+                'success' => false,
+                'message' => 'Not Found.',
             ]);
         }
 
-        return response()->json([
-            'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
-    }
-
-    public function cancel_express_shipping($id)
-    {
-        $expressShipping = ExpressShipping::findorfail($id);
-
-        if($expressShipping->status == 'New')
+        if(strtoupper($result) == 'EXS-ORD')
         {
-            $expressShipping->delete();
-    
+            $expressShipping = ExpressShipping::where('order_id', $order_id)->first();
+
+            if($expressShipping)
+            {
+                if($expressShipping->status == 'New')
+                {
+                    $expressShipping->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled'
+                    ]);
+                } 
+        
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+            }
+
             return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled'
-            ]);
-        } 
-
-        return response()->json([
-            'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
-    }
-
-    public function cancel_warehousing($id)
-    {
-        $warehousing = Warehousing::findorfail($id);
-
-        if($warehousing->status == 'New')
-        {
-            $warehousing->delete();
-    
-            return response()->json([
-                'success' => true,
-                'message' => 'Request Cancelled'
+                'success' => false,
+                'message' => 'Not Found.',
             ]);
         }
 
+        if(strtoupper($result) == 'WAH-ORD')
+        {
+            $warehousing = Warehousing::where('order_id', $order_id)->first();
+
+            if($warehousing)
+            {
+                if($warehousing->status == 'New')
+                {
+                    $warehousing->delete();
+            
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Request Cancelled'
+                    ]);
+                }
+
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Request not completed, it accepts only when the request sent is pending.',
+                ]);
+            } 
+
+            return response()->json([
+                'success' => false,
+                'message' => 'Not Found.',
+            ]);
+        }
+           
         return response()->json([
             'success' => false,
-            'message' => 'Request not completed, it accepts only when the request sent is pending.',
-        ]);
+            'message' => 'No Details found. Try again !',
+        ]); 
     }
 
     public function update_profile(Request $request)
@@ -1315,9 +1374,9 @@ class DashboardController extends Controller
 
     public function get_orders_by_order_id($order_id)
     {
-        $result = substr($order_id, 0, 3);
+        $result = substr($order_id, 0, 7);
 
-        if(strtoupper($result) == 'PUS')
+        if(strtoupper($result) == 'PUS-ORD')
         {
             $order = PickupService::where('order_id','LIKE','%'.$order_id.'%')->get();
 
@@ -1335,7 +1394,7 @@ class DashboardController extends Controller
             }
         }
 
-        if(strtoupper($result) == 'ISS')
+        if(strtoupper($result) == 'ISS-ORD')
         {
             $order = InterStateService::where('order_id','LIKE','%'.$order_id.'%')->get();
 
@@ -1353,7 +1412,7 @@ class DashboardController extends Controller
             }
         }
 
-        if(strtoupper($result) == 'OSS')
+        if(strtoupper($result) == 'OSS-ORD')
         {
             $order = OverseaShipping::where('order_id','LIKE','%'.$order_id.'%')->get();
 
@@ -1371,7 +1430,7 @@ class DashboardController extends Controller
             }
         }
 
-        if(strtoupper($result) == 'PCM')
+        if(strtoupper($result) == 'PCM-ORD')
         {
             $order = Procurement::where('order_id','LIKE','%'.$order_id.'%')->get();
 
@@ -1389,7 +1448,7 @@ class DashboardController extends Controller
             }
         }
 
-        if(strtoupper($result) == 'EXS')
+        if(strtoupper($result) == 'EXS-ORD')
         {
             $order = ExpressShipping::where('order_id','LIKE','%'.$order_id.'%')->get();
 
@@ -1407,9 +1466,127 @@ class DashboardController extends Controller
             }
         }
 
-        if(strtoupper($result) == 'WAH')
+        if(strtoupper($result) == 'WAH-ORD')
         {
             $order = Warehousing::where('order_id','LIKE','%'.$order_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+           
+        return response()->json([
+            'success' => false,
+            'message' => 'No Details found. Try to search again !',
+        ]); 
+    }
+
+    public function track_order($tracking_id)
+    {
+        $result = substr($tracking_id, 0, 3);
+
+        if(strtoupper($result) == 'PUS')
+        {
+            $order = PickupService::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'ISS')
+        {
+            $order = InterStateService::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'OSS')
+        {
+            $order = OverseaShipping::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'PCM')
+        {
+            $order = Procurement::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'EXS')
+        {
+            $order = ExpressShipping::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
+
+            if(count($order) > 0) {
+                return response()->json([
+                    'success' => true,
+                    'message' => 'Order Retrieved Successfully',
+                    'data' => $order
+                ]);
+            } else {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No Details found. Try to search again !',
+                ]); 
+            }
+        }
+
+        if(strtoupper($result) == 'WAH')
+        {
+            $order = Warehousing::where('tracking_number','LIKE','%'.$tracking_id.'%')->get();
 
             if(count($order) > 0) {
                 return response()->json([

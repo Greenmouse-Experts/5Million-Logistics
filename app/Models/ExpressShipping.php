@@ -45,6 +45,7 @@ class ExpressShipping extends Model
         'comment',
         'status',
         'progress',
+        'estimated_delivery_time',
         'current_location'
     ];
 

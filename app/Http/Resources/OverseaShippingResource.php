@@ -45,6 +45,7 @@ class OverseaShippingResource extends JsonResource
             'comment' => $this->comment,
             'status' => $this->status,
             'progress' => $this->progress,
+            'estimated_delivery_time' => $this->estimated_delivery_time,
             'current_location' => $this->current_location,
             'created_at' => $this->created_at,
             'order_by' => new UserResource($this->user),

@@ -65,12 +65,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::post('/update/express/shipping/{id}', [DashboardController::class, 'update_express_shipping']);
         Route::post('/update/warehousing/{id}', [DashboardController::class, 'update_warehousing']);
 
-        Route::post('/cancel/pickup/service/{id}', [DashboardController::class, 'cancel_pickup_service']);
-        Route::post('/cancel/inter-state/service/{id}', [DashboardController::class, 'cancel_inter_state_service']);
-        Route::post('/cancel/oversea/shipping/{id}', [DashboardController::class, 'cancel_oversea_shipping']);
-        Route::post('/cancel/procurement/{id}', [DashboardController::class, 'cancel_procurement']);
-        Route::post('/cancel/express/shipping/{id}', [DashboardController::class, 'cancel_express_shipping']);
-        Route::post('/cancel/warehousing/{id}', [DashboardController::class, 'cancel_warehousing']);
+        Route::post('/cancel/order/{id}', [DashboardController::class, 'cancel_order']);
 
         Route::get('/count/pickup/service', [DashboardController::class, 'count_pickup_service']);
         Route::get('/count/inter-state/service', [DashboardController::class, 'count_inter_state_service']);
@@ -95,6 +90,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
         Route::middleware(['auth', 'isAdmin'])->group(function () {
             Route::get('/admin/get/all/user/customer', [AdminController::class, 'get_all_user_customer']);
             Route::get('/admin/get/all/user/partner', [AdminController::class, 'get_all_user_partner']);
+            Route::get('/admin/get/user/{id}', [AdminController::class, 'get_user']);
+            Route::post('/admin/user/profile/{id}', [AdminController::class, 'update_user_profile']);
+            Route::post('/admin/user/password', [AdminController::class, 'update_user_password']);
+            Route::get('/admin/user/deactivate/{id}', [AdminController::class, 'user_deactivate']);
+            Route::get('/admin/user/activate/{id}', [AdminController::class, 'user_activate']);
+
             // Service
             Route::get('/admin/get/all/pickup/service', [AdminController::class, 'get_all_pickup_service']);
             Route::get('/admin/get/all/inter-state/service', [AdminController::class, 'get_all_inter_state_service']);
@@ -102,7 +103,12 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
             Route::get('/admin/get/all/procurement', [AdminController::class, 'get_all_procurement']);
             Route::get('/admin/get/all/express/shipping', [AdminController::class, 'get_all_express_shipping']);
             Route::get('/admin/get/all/warehousing', [AdminController::class, 'get_all_warehousing']);
+
+            // Dispatch Orders
+            Route::post('/admin/dispatch/order/{order_id}', [AdminController::class, 'dispatch_order']);
         });
     });
-    
+
+    // General Tracking
+    Route::get('/general/track/orders/{tracking_id}', [DashboardController::class, 'track_order']);
 });

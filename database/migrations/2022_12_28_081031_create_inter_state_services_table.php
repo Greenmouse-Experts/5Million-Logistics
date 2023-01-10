@@ -35,6 +35,7 @@ return new class extends Migration
             $table->string('comment')->nullable();
             $table->string('status')->default('New')->index();
             $table->string('progress')->nullable();
+            $table->string('estimated_delivery_time')->nullable();
             $table->string('current_location')->nullable();
             $table->timestamps();
         });
