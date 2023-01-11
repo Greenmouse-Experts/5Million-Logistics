@@ -3,6 +3,7 @@
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\HomePageController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -83,6 +84,7 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
 
         Route::get('/get/orders/by/order_id/{order_id}', [DashboardController::class, 'get_orders_by_order_id']);
         Route::get('/track/orders/{tracking_id}', [DashboardController::class, 'track_orders']);
+        Route::get('/get/order-board', [DashboardController::class, 'get_order_board']);
 
         Route::post('logout', [DashboardController::class, 'logout']);
 
@@ -104,11 +106,14 @@ Route::group(['middleware' => ['cors', 'json.response']], function () {
             Route::get('/admin/get/all/express/shipping', [AdminController::class, 'get_all_express_shipping']);
             Route::get('/admin/get/all/warehousing', [AdminController::class, 'get_all_warehousing']);
 
+            // Update Service
+            Route::post('/admin/update/order/{order_id}', [AdminController::class, 'update_order']);
+
             // Dispatch Orders
             Route::post('/admin/dispatch/order/{order_id}', [AdminController::class, 'dispatch_order']);
         });
     });
 
     // General Tracking
-    Route::get('/general/track/orders/{tracking_id}', [DashboardController::class, 'track_order']);
+    Route::get('/general/track/orders/{tracking_id}', [HomePageController::class, 'track_order']);
 });

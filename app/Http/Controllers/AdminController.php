@@ -260,170 +260,643 @@ class AdminController extends Controller
         ]);
     }
 
-    public function dispatch_order($order_id)
+    public function update_order($order_id, Request $request)
     {
         $result = substr($order_id, 0, 7);
 
         if(strtoupper($result) == 'PUS-ORD')
         {
-            $order = PickupService::where('order_id', $order_id)->first();
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $order = PickupService::where('order_id',$order_id)->first();
 
             if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
-                ]);
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
+                    'progress' => $request->progress,
+                    'estimated_delivery_time' => $request->estimated_delivery_time,
+                    'current_location' => $request->current_location,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
             }
         }
 
         if(strtoupper($result) == 'ISS-ORD')
         {
-            $order = InterStateService::where('order_id', $order_id)->first();
-            
-            if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
                 ]);
+            }
+
+            $order = InterStateService::where('order_id',$order_id)->first();
+
+            if($order) {
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
+                    'progress' => $request->progress,
+                    'estimated_delivery_time' => $request->estimated_delivery_time,
+                    'current_location' => $request->current_location,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
             }
         }
 
         if(strtoupper($result) == 'OSS-ORD')
         {
-            $order = OverseaShipping::where('order_id', $order_id)->first();
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $order = OverseaShipping::where('order_id',$order_id)->first();
 
             if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
-                ]);
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
+                    'progress' => $request->progress,
+                    'estimated_delivery_time' => $request->estimated_delivery_time,
+                    'current_location' => $request->current_location,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
             }
         }
 
         if(strtoupper($result) == 'PCM-ORD')
         {
-            $order = Procurement::where('order_id', $order_id)->first();
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $order = Procurement::where('order_id',$order_id)->first();
 
             if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
-                ]);
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
             }
         }
 
         if(strtoupper($result) == 'EXS-ORD')
         {
-            $order = ExpressShipping::where('order_id', $order_id)->first();
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+
+            $order = ExpressShipping::where('order_id',$order_id)->first();
 
             if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
-                ]);
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
+                    'progress' => $request->progress,
+                    'estimated_delivery_time' => $request->estimated_delivery_time,
+                    'current_location' => $request->current_location,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
             }
         }
 
         if(strtoupper($result) == 'WAH-ORD')
         {
-            $order = Warehousing::where('order_id', $order_id)->first();
+            $validator = Validator::make(request()->all(), [
+                'status' => 'required|string|max:244|min:1',
+            ]);
+    
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Please see errors parameter for all errors.',
+                    'errors' => $validator->errors()
+                ]);
+            }
+            
+            $order = Warehousing::where('order_id',$order_id)->first();
 
             if($order) {
-                $orderboard = OrderBoard::create([
-                    'service_id' => $order->id,
-                    'service_type' => $order->service_type
-                ]);
 
                 $order->update([
-                    'status' => 'Dispatch'
+                    'comment' => $request->comment,
+                    'status' => $request->status,
                 ]);
 
                 return response()->json([
                     'success' => true,
-                    'message' => 'Order Dispatched Successfully',
-                    'data' => new OrderBoardResource($orderboard)
+                    'message' => 'Order updated successfully.',
+                    'data' => $order
                 ]);
-
             } else {
                 return response()->json([
                     'success' => false,
-                    'message' => 'No Details found!',
+                    'message' => 'Details not found in our database.',
                 ]); 
+            }
+        }
+           
+        return response()->json([
+            'success' => false,
+            'message' => 'Details not found in our database.',
+        ]); 
+    }
+
+    public function dispatch_order($order_id)
+    {
+        $result = substr($order_id, 0, 7);
+
+        if(strtoupper($result) == 'PUS-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'Pickup')->get();
+            
+            $order = PickupService::where('order_id', $order_id)->first();
+
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }   
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    } 
+                }
+            }
+        }
+
+        if(strtoupper($result) == 'ISS-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'InterState')->get();
+
+            $order = InterStateService::where('order_id', $order_id)->first();
+            
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    }
+                }
+            }
+        }
+
+        if(strtoupper($result) == 'OSS-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'OverseaShipping')->get();
+
+            $order = OverseaShipping::where('order_id', $order_id)->first();
+
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    }
+                }
+            }
+        }
+
+        if(strtoupper($result) == 'PCM-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'Procurement')->get();
+
+            $order = Procurement::where('order_id', $order_id)->first();
+
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    }
+                }
+            }
+        }
+
+        if(strtoupper($result) == 'EXS-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'ExpressShipping')->get();
+
+            $order = ExpressShipping::where('order_id', $order_id)->first();
+
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    }
+                }
+            }
+        }
+
+        if(strtoupper($result) == 'WAH-ORD')
+        {
+            $boards = OrderBoard::where('service_type', 'Warehousing')->get();
+
+            $order = Warehousing::where('order_id', $order_id)->first();
+
+            if($boards->isEmpty())
+            {
+                if($order) {
+                    $orderboard = OrderBoard::create([
+                        'service_id' => $order->id,
+                        'service_type' => $order->service_type
+                    ]);
+
+                    $order->update([
+                        'status' => 'Dispatch'
+                    ]);
+
+                    return response()->json([
+                        'success' => true,
+                        'message' => 'Order Dispatched Successfully',
+                        'data' => new OrderBoardResource($orderboard)
+                    ]);
+
+                } else {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'No Details found!',
+                    ]); 
+                }
+            } else {
+                foreach($boards as $board)
+                {
+                    $serviceID[] = $board->service_id; 
+                }
+                if (in_array($order->id, $serviceID)) 
+                {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'This order has been dispatched before.',
+                    ]); 
+                } else {
+                    if($order) {
+                        $orderboard = OrderBoard::create([
+                            'service_id' => $order->id,
+                            'service_type' => $order->service_type
+                        ]);
+    
+                        $order->update([
+                            'status' => 'Dispatch'
+                        ]);
+    
+                        return response()->json([
+                            'success' => true,
+                            'message' => 'Order Dispatched Successfully',
+                            'data' => new OrderBoardResource($orderboard)
+                        ]);
+    
+                    } else {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'No Details found!',
+                        ]); 
+                    }
+                }
             }
         }
            
