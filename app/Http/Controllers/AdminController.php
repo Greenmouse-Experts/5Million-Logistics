@@ -267,6 +267,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'PUS-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -283,6 +284,7 @@ class AdminController extends Controller
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                     'progress' => $request->progress,
@@ -306,6 +308,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'ISS-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -322,6 +325,7 @@ class AdminController extends Controller
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                     'progress' => $request->progress,
@@ -345,6 +349,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'OSS-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -361,6 +366,7 @@ class AdminController extends Controller
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                     'progress' => $request->progress,
@@ -384,6 +390,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'PCM-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -400,6 +407,7 @@ class AdminController extends Controller
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                 ]);
@@ -420,6 +428,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'EXS-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -436,6 +445,7 @@ class AdminController extends Controller
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                     'progress' => $request->progress,
@@ -459,6 +469,7 @@ class AdminController extends Controller
         if(strtoupper($result) == 'WAH-ORD')
         {
             $validator = Validator::make(request()->all(), [
+                'price' => 'required|string|max:244|min:1',
                 'status' => 'required|string|max:244|min:1',
             ]);
     
@@ -469,12 +480,13 @@ class AdminController extends Controller
                     'errors' => $validator->errors()
                 ]);
             }
-            
+
             $order = Warehousing::where('order_id',$order_id)->first();
 
             if($order) {
 
                 $order->update([
+                    'price' => $request->price,
                     'comment' => $request->comment,
                     'status' => $request->status,
                 ]);
