@@ -20,12 +20,24 @@ class OrderBoardResource extends JsonResource
         return [
             'id' => $this->id,
             'assigned_to' => $this->assigned_to,
-            'pickup_order' => $this->when($this->service_type === "Pickup", new PickupResource($this->pickup)),
-            'interstate_order' => $this->when($this->service_type === "InterState", new InterStateResource($this->interstate)),
-            'overseashipping_order' => $this->when($this->service_type === "OverseaShipping", new OverseaShippingResource($this->overseashipping)),
-            'expressshipping_order' => $this->when($this->service_type === "ExpressShipping", new ExpressShippingResource($this->expressshipping)),
-            'procurement_order' => $this->when($this->service_type === "Procurement", new ProcurementResource($this->procurement)),
-            'warehousing_order' => $this->when($this->service_type === "Warehousing", new WarehousingResource($this->warehousing)),
+            $this->mergeWhen($this->service_type == "Pickup", [
+                'order' => PickupResource::collection($this->pickup),
+            ]),
+            $this->mergeWhen($this->service_type == "InterState", [
+                'order' => InterStateResource::collection($this->interstate),
+            ]),
+            $this->mergeWhen($this->service_type == "OverseaShipping", [
+                'order' => OverseaShippingResource::collection($this->overseashipping),
+            ]),
+            $this->mergeWhen($this->service_type == "ExpressShipping", [
+                'mergeWhen' => ExpressShippingResource::collection($this->expressshipping),
+            ]),
+            $this->when($this->service_type == "Procurement", [
+                'mergeWhen' => ProcurementResource::collection($this->procurement),
+            ]),
+            $this->when($this->service_type == "Warehousing", [
+                'mergeWhen' => WarehousingResource::collection($this->warehousing),
+            ]),
         ];
     }
 }

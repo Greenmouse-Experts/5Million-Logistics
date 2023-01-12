@@ -22,31 +22,31 @@ class OrderBoard extends Model
 
     public function pickup()
     {
-        return $this->hasOne(PickupService::class, 'id', 'service_id');
+        return $this->hasMany(PickupService::class, 'id', 'service_id');
     }
 
     public function interstate()
     {
-        return $this->hasOne(InterStateService::class, 'id', 'service_id');
+        return $this->hasMany(InterStateService::class, 'id', 'service_id');
     }
 
     public function overseashipping()
     {
-        return $this->hasOne(OverseaShipping::class, 'id', 'service_id');
+        return $this->hasMany(OverseaShipping::class, 'id', 'service_id');
     }
 
     public function expressshipping()
     {
-        return $this->hasOne(ExpressShipping::class, 'id', 'service_id');
+        return $this->hasMany(ExpressShipping::class, 'id', 'service_id');
     }
 
     public function procurement()
     {
-        return $this->hasOne(Procurement::class, 'id', 'service_id');
+        return $this->hasMany(Procurement::class, 'id', 'service_id');
     }
 
     public function warehousing()
     {
-        return $this->hasOne(Warehousing::class, 'id', 'service_id');
+        return $this->hasMany(Warehousing::class, 'id', 'service_id');
     }
 }

@@ -535,7 +535,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
                 } else {
                     return response()->json([
@@ -567,8 +566,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
                     } else {
                         return response()->json([
@@ -601,7 +599,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
                 } else {
                     return response()->json([
@@ -633,8 +630,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
                     } else {
                         return response()->json([
@@ -667,7 +663,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
                 } else {
                     return response()->json([
@@ -699,8 +694,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
                     } else {
                         return response()->json([
@@ -733,7 +727,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
                 } else {
                     return response()->json([
@@ -765,8 +758,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
                     } else {
                         return response()->json([
@@ -799,7 +791,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
                 } else {
                     return response()->json([
@@ -831,8 +822,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
                     } else {
                         return response()->json([
@@ -865,7 +855,6 @@ class AdminController extends Controller
                     return response()->json([
                         'success' => true,
                         'message' => 'Order Dispatched Successfully',
-                        'data' => new OrderBoardResource($orderboard)
                     ]);
 
                 } else {
@@ -898,8 +887,7 @@ class AdminController extends Controller
     
                         return response()->json([
                             'success' => true,
-                            'message' => 'Order Dispatched Successfully',
-                            'data' => new OrderBoardResource($orderboard)
+                            'message' => 'Order Dispatched Successfully'
                         ]);
     
                     } else {
